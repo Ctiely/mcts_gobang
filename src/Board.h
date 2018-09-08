@@ -12,19 +12,23 @@ using namespace std;
 
 class Board {
 public:
-    explicit Board(unsigned int boardsize)
-        : size(boardsize) {
+    explicit Board(unsigned int boardsize, unsigned int win_n=5)
+            : size(boardsize), win_n(win_n) {
         reset();
     };
     ~Board() = default;
 
     void reset();
     void step(unsigned int action);
+    void step(unsigned int row, unsigned int col);
     unsigned int current_player();
     bool over();
     void render();
 
+    Board copy();
+
     unsigned int size;
+    unsigned int win_n;
     unsigned int spaces;
     unsigned int round;
     unordered_map<unsigned int, unsigned int> states;

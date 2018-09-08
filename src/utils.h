@@ -5,13 +5,46 @@
 #ifndef MCTS_GOBANG_UTILS_H
 #define MCTS_GOBANG_UTILS_H
 
+#include <list>
 #include <vector>
-using namespace std;
+#include <utility>
 
-template <typename T1, typename T2>
-class utils {
-public:
-    vector<T1, T2> zip();
+
+namespace utils { //两个namespace可能会冲突
+    template <typename T1, typename T2>
+    static std::vector<std::pair<T1, T2> > zip(std::vector<T1> & vec1, std::vector<T2> & vec2) {
+        std::vector<std::pair<T1, T2> > result;
+        unsigned long length1 = vec1.size();
+        unsigned long length2 = vec2.size();
+        unsigned long min_length = (length1 < length2) ? length1 : length2;
+        if (min_length <= 0) {
+            return result;
+        }
+        for (unsigned long i = 0; i < min_length; ++i) {
+            result.push_back(std::make_pair(vec1[i], vec2[i]));
+        }
+        return result;
+    }
+
+    template <typename T1, typename T2>
+    static std::vector<std::pair<T1, T2> > zip(std::list<T1> & list1, std::vector<T2> & vec2) {
+        std::vector<std::pair<T1, T2> > result;
+        unsigned long length1 = list1.size();
+        unsigned long length2 = vec2.size();
+        unsigned long min_length = (length1 < length2) ? length1 : length2;
+        if (min_length <= 0) {
+            return result;
+        }
+        int i = 0;
+        for (typename std::list<T1>::const_iterator itr = list1.begin(); itr != list1.end(); ++itr, ++i) {
+            if (i < min_length) {
+                result.push_back(std::make_pair(*itr, vec2[i]));
+            } else {
+                break;
+            }
+        }
+        return result;
+    }
 };
 
 
