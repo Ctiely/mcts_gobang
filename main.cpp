@@ -2,7 +2,16 @@
 #include "src/Board.h"
 #include "src/MCTSPlayer.h"
 
-int main() {
+void test_MCTS() {
+    Board board(10, 5);
+    board.step(5, 5);
+    MCTS tree(5, 1000, 100);
+    tree.get_action(board);
+    unsigned int depth = tree.depth();
+    cout << "depth " << depth << endl;
+}
+
+void play() {
     unsigned int win_n = 5;
     unsigned int size = 10;
     Board board(size, win_n);
@@ -23,22 +32,28 @@ int main() {
         cout << board.over() << endl;
         board.render();
     }
+}
 
-    /*
-    board.step(55);
-    MCTSPlayer player(5, 2000, 1000);
-    cout << player.get_action(board) << endl;
-    board.render();
-    board.step(99);
+void test_zip() {
+    vector<double> ivec(5, 0.1);
+    for (int i = 0; i < 5; ++i) {
+        // ivec.push_back(i);
+    }
 
+    cout << endl;
+    list<string> svec;
+    for (int j = 0; j < 10; ++j) {
+        svec.push_back(to_string(j));
+    }
 
-    board.step(54);
-    //cout << player.get_action(board) << endl;
-    board.step(96);
-    board.step(53);
-    //cout << player.get_action(board) << endl;
-    */
-    /*
+    vector<pair<string, double> > t = utils::zip<string, double>(svec, ivec);
+    list<int> l = {1, 2, 3, 4};
+    for (int k = 0; k < t.size(); ++k) {
+        cout << t[k].first << " " << t[k].second << endl;
+    }
+}
+void test_board() {
+    Board game(10, 5);
     game.step(0);
     game.step(1);
     game.step(10);
@@ -60,22 +75,12 @@ int main() {
     game.render();
     copy.render();
     cout << copy.spaces << copy.over();
+}
 
-    vector<double> ivec(5, 0.1);
-    for (int i = 0; i < 5; ++i) {
-       // ivec.push_back(i);
-    }
-
-    cout << endl;
-    list<string> svec;
-    for (int j = 0; j < 10; ++j) {
-        svec.push_back(to_string(j));
-    }
-
-    vector<pair<string, double> > t = utils::zip<string, double>(svec, ivec);
-    list<int> l = {1, 2, 3, 4};
-    for (int k = 0; k < t.size(); ++k) {
-        cout << t[k].first << t[k].second << endl;
-    }*/
+int main() {
+    //test_board();
+    //test_MCTS();
+    //test_zip();
+    play();
     return 0;
 }
