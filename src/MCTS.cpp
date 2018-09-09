@@ -50,9 +50,9 @@ pair<unsigned int, MCTS::TreeNode *> MCTS::TreeNode::select(double c_puct) {
         } else {
             auto i = 0;
             auto action_index = random() % NoExplore.size();
-            for (typename unordered_map<unsigned int, TreeNode *> ::const_iterator itr = NoExplore.begin(); itr != NoExplore.end(); ++itr, ++i) {
+            for (typename unordered_map<unsigned int, MCTS::TreeNode *>::const_iterator itr = NoExplore.begin(); itr != NoExplore.end(); ++itr, ++i) {
                 if (i == action_index) {
-                    pair<unsigned int, TreeNode *> next_action = *itr;
+                    pair<unsigned int, MCTS::TreeNode *> next_action = *itr;
                     NoExplore.erase(itr);
                     return next_action;
                     //action = itr->first;             //最初的NoExplore是个hash map,它中存储的节点是新创建的,所以与children中的是不同的节点,但如果使用NoExplore = children
