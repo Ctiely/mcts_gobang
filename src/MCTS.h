@@ -27,6 +27,7 @@ public:
 
     unsigned int get_action(Board & board);
     void update_with_action(unsigned int last_action);
+    unsigned int depth();
 
     unsigned int max_round;
 private:
@@ -47,6 +48,7 @@ private:
         unordered_map<unsigned int, TreeNode *> children;
         unsigned int n_visits;
     private:
+        //list<unsigned int> NoExplore;
         unordered_map<unsigned int, TreeNode *> NoExplore;
         double Q;
         double u;
@@ -57,6 +59,7 @@ private:
     double c_pust;
     unsigned int n_playround;
 
+    unsigned int depth(TreeNode * node);
     void playout(Board & board);
     int evaluate_rollout(Board & board);
 };
