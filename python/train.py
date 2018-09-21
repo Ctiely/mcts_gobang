@@ -142,7 +142,7 @@ class TrainPipeline():
                 #save the model params
                 if (step + 1) % self.save_step == 0:
                     logging.info("current self-play batch: {}".format(step + 1))
-                    self.policy_value_net.save_model("./models/model", global_step=step)
+                    self.policy_value_net.save_model("./models/model", global_step=step + 1)
         except KeyboardInterrupt:
             logging.warning("\n\rquit")
             
