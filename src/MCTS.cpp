@@ -83,7 +83,7 @@ void MCTS::playout(Board & board) {
     }
     if (!board.over()) {
         vector<double> probs(board.spaces, 1.0 / board.spaces);
-        assert(board.availables.size() == probs.size());
+        //assert(board.availables.size() == probs.size());
         vector<pair<unsigned int, double> > action_probs = utils::zip<unsigned int, double>(board.availables, probs);
         cur->expend(action_probs);
     }
@@ -131,8 +131,8 @@ unsigned int MCTS::get_action(Board & board) { //每个状态(board)下都重建
     for (int i = 0; i < n_playround; ++i) {
         Board board_copy = board.copy();
         playout(board_copy);
-        assert(board_copy.moves != board.moves);
-        assert(board_copy.availables != board.availables);
+        //assert(board_copy.moves != board.moves);
+        //assert(board_copy.availables != board.availables);
     }
     auto max_n_visits = 0;
     unsigned int action = board.spaces;
