@@ -37,7 +37,7 @@ class TrainPipeline():
             # start training from a new policy-value net
             self.policy_value_net = policy_value_network(self.board_size)
 
-        self.mcts_player = MCTSPlayer(self.policy_value_net.policy_value_fn,
+        self.mcts_player = MCTSPlayer(self.policy_value_net,
                                       c_puct=self.c_puct,
                                       n_playround=self.n_playround,
                                       is_selfplay=True)

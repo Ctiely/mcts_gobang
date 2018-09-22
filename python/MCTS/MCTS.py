@@ -4,8 +4,8 @@ from .TreeNode import TreeNode
 
 
 class MCTS(object):
-    def __init__(self, policy_value_fn, c_puct=5, n_playround=5000):
-        self._policy_value = policy_value_fn
+    def __init__(self, policy_value_net, c_puct=5, n_playround=5000):
+        self._policy_value_net = policy_value_net
         self._c_puct = c_puct
         self._n_playround = n_playround
         self._root = TreeNode()
@@ -27,7 +27,7 @@ class MCTS(object):
             action, cur = cur.select(self._c_puct)
             board.step(action)
         if not board.over:
-            action_probs, leaf_value = self._policy_value(board)
+            action_probs, leaf_value = self._policy_value_net.policy_value_fn(board)
             cur.expend(action_probs)
         else:
             leaf_value = self._evaluate(board.winner, board.current_player)

@@ -17,8 +17,8 @@ class _MCTSPlayer(object):
         return action
 
 class MCTSPlayer(object):
-    def __init__(self, policy_value_function, c_puct=5, n_playround=5000, is_selfplay=True):
-        self.mcts = MCTS(policy_value_function, c_puct, n_playround)
+    def __init__(self, policy_value_net, c_puct=5, n_playround=5000, is_selfplay=True):
+        self.mcts = MCTS(policy_value_net, c_puct, n_playround)
         self._is_selfplay = is_selfplay
 
     def reset_player(self):
