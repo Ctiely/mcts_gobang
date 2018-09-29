@@ -26,7 +26,7 @@ class AI(QtCore.QThread):
     # 构造函数里增加形参
     def __init__(self, board, parent=None):
         super(AI, self).__init__(parent)
-        self.player = _MCTSPlayer(5, 10000, 100)
+        self.player = _MCTSPlayer(5, 25000, 100)
         self.board = board
 
     # 重写 run() 函数
@@ -179,6 +179,7 @@ class GoBang(QWidget):
             self.piece_now = BLACK
             self.mouse_point.setPixmap(self.black)
             self.board.reset()
+            self.board.render()
             self.step = 0
             for piece in self.pieces:
                 piece.clear()

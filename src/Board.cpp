@@ -120,7 +120,7 @@ void Board::step(unsigned int row, unsigned int col) {
 void Board::render() {
     printf("  ");
     for (int row = 0; row < size; ++row) {
-        printf(" %d", row);
+        printf(" %d", row % 10);
     }
     printf("\n  ");
     for (int row = 0; row < size; ++row) {
@@ -128,7 +128,7 @@ void Board::render() {
     }
     printf("\n");
     for (int row = 0; row < size; ++row) {
-        printf("%d |", row);
+        printf("%d |", row % 10);
         for (int col = 0; col < size; ++col) {
             if (moves[0][row][col] == 1) {
                 printf("0");
