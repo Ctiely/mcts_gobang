@@ -1,9 +1,9 @@
 #include "MCTSThread.h"
 
 
-MCTSThread::MCTSThread(Board & board)
+MCTSThread::MCTSThread(Board & board, unsigned int n_playround, unsigned int limit)
     : pboard(&board) {
-    player = new MCTSPlayer(5, 15000, 100);
+    player = new MCTSPlayer(5, n_playround, limit);
 }
 
 void MCTSThread::run() {

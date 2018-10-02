@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QObject>
+
 #include "../../Board.h"
 #include "../../MCTSPlayer.h"
 
@@ -10,7 +11,7 @@ class MCTSThread : public QThread
 {
     Q_OBJECT
 public:
-    MCTSThread(Board & board);
+    MCTSThread(Board & board, unsigned int n_playground=15000, unsigned int limit=100);
     void run();
     Board * pboard;
     MCTSPlayer * player;

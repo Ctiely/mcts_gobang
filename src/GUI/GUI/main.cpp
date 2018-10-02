@@ -1,11 +1,12 @@
-#include "GoBang.h"
+#include "game.h"
 #include <QApplication>
+
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    GoBang w;
-    w.show();
+    game g;
+    g.show();
 
     return a.exec();
 }

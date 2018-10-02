@@ -28,12 +28,16 @@ SOURCES += \
         main.cpp \
         GoBang.cpp \
     MCTSThread.cpp \
-    ../../*.cpp
+    ../../*.cpp \
+    game.cpp \
+    gobang_mcts.cpp
 
 HEADERS += \
         GoBang.h \
     MCTSThread.h \
-    ../../*.h
+    ../../*.h \
+    game.h \
+    gobang_mcts.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -55,16 +55,24 @@ SOURCES       = ../GUI/main.cpp \
 		../GUI/MCTSThread.cpp \
 		../../Board.cpp \
 		../../MCTS.cpp \
-		../../MCTSPlayer.cpp moc_GoBang.cpp \
-		moc_MCTSThread.cpp
+		../../MCTSPlayer.cpp \
+		../GUI/game.cpp \
+		../GUI/gobang_mcts.cpp moc_GoBang.cpp \
+		moc_MCTSThread.cpp \
+		moc_game.cpp \
+		moc_gobang_mcts.cpp
 OBJECTS       = main.o \
 		GoBang.o \
 		MCTSThread.o \
 		Board.o \
 		MCTS.o \
 		MCTSPlayer.o \
+		game.o \
+		gobang_mcts.o \
 		moc_GoBang.o \
-		moc_MCTSThread.o
+		moc_MCTSThread.o \
+		moc_game.o \
+		moc_gobang_mcts.o
 DIST          = ../../../../Qt/5.11.2/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.11.2/clang_64/mkspecs/qdevice.pri \
 		../../../../Qt/5.11.2/clang_64/mkspecs/features/device_config.prf \
@@ -236,12 +244,16 @@ DIST          = ../../../../Qt/5.11.2/clang_64/mkspecs/features/spec_pre.prf \
 		../../Board.h \
 		../../MCTS.h \
 		../../MCTSPlayer.h \
-		../../utils.h ../GUI/main.cpp \
+		../../utils.h \
+		../GUI/game.h \
+		../GUI/gobang_mcts.h ../GUI/main.cpp \
 		../GUI/GoBang.cpp \
 		../GUI/MCTSThread.cpp \
 		../../Board.cpp \
 		../../MCTS.cpp \
-		../../MCTSPlayer.cpp
+		../../MCTSPlayer.cpp \
+		../GUI/game.cpp \
+		../GUI/gobang_mcts.cpp
 QMAKE_TARGET  = GUI
 DESTDIR       = 
 TARGET        = GUI.app/Contents/MacOS/GUI
@@ -633,8 +645,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt/5.11.2/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../GUI/GoBang.h ../GUI/MCTSThread.h ../../Board.h ../../MCTS.h ../../MCTSPlayer.h ../../utils.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../GUI/main.cpp ../GUI/GoBang.cpp ../GUI/MCTSThread.cpp ../../Board.cpp ../../MCTS.cpp ../../MCTSPlayer.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../GUI/GoBang.h ../GUI/MCTSThread.h ../../Board.h ../../MCTS.h ../../MCTSPlayer.h ../../utils.h ../GUI/game.h ../GUI/gobang_mcts.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../GUI/main.cpp ../GUI/GoBang.cpp ../GUI/MCTSThread.cpp ../../Board.cpp ../../MCTS.cpp ../../MCTSPlayer.cpp ../GUI/game.cpp ../GUI/gobang_mcts.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -666,18 +678,32 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../../../Qt/5.11.2/clang_64/mkspecs/features/data/dummy.cpp
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -g -std=gnu++11 $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.11 -Wall -W -dM -E -o moc_predefs.h ../../../../Qt/5.11.2/clang_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_GoBang.cpp moc_MCTSThread.cpp
+compiler_moc_header_make_all: moc_GoBang.cpp moc_MCTSThread.cpp moc_game.cpp moc_gobang_mcts.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_GoBang.cpp moc_MCTSThread.cpp
-moc_GoBang.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
-		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+	-$(DEL_FILE) moc_GoBang.cpp moc_MCTSThread.cpp moc_game.cpp moc_gobang_mcts.cpp
+moc_GoBang.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QThread \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
-		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
-		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../GUI/MCTSThread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
 		../../Board.h \
+		../../MCTSPlayer.h \
+		../../MCTS.h \
+		../../utils.h \
 		../GUI/GoBang.h \
 		moc_predefs.h \
 		../../../../Qt/5.11.2/clang_64/bin/moc
@@ -695,6 +721,70 @@ moc_MCTSThread.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/
 		moc_predefs.h \
 		../../../../Qt/5.11.2/clang_64/bin/moc
 	/Users/clytie/Documents/Qt/5.11.2/clang_64/bin/moc $(DEFINES) --include /Users/clytie/Documents/mcts_gobang/src/GUI/build-GUI-Desktop_Qt_5_11_2_clang_64bit-Debug/moc_predefs.h -I/Users/clytie/Documents/Qt/5.11.2/clang_64/mkspecs/macx-clang -I/Users/clytie/Documents/mcts_gobang/src/GUI/GUI -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/clytie/Documents/Qt/5.11.2/clang_64/lib ../GUI/MCTSThread.h -o moc_MCTSThread.cpp
+
+moc_game.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		../GUI/GoBang.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QThread \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../GUI/MCTSThread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../Board.h \
+		../../MCTSPlayer.h \
+		../../MCTS.h \
+		../../utils.h \
+		../GUI/gobang_mcts.h \
+		../GUI/game.h \
+		moc_predefs.h \
+		../../../../Qt/5.11.2/clang_64/bin/moc
+	/Users/clytie/Documents/Qt/5.11.2/clang_64/bin/moc $(DEFINES) --include /Users/clytie/Documents/mcts_gobang/src/GUI/build-GUI-Desktop_Qt_5_11_2_clang_64bit-Debug/moc_predefs.h -I/Users/clytie/Documents/Qt/5.11.2/clang_64/mkspecs/macx-clang -I/Users/clytie/Documents/mcts_gobang/src/GUI/GUI -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/clytie/Documents/Qt/5.11.2/clang_64/lib ../GUI/game.h -o moc_game.cpp
+
+moc_gobang_mcts.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../GUI/GoBang.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QThread \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../GUI/MCTSThread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../Board.h \
+		../../MCTSPlayer.h \
+		../../MCTS.h \
+		../../utils.h \
+		../GUI/gobang_mcts.h \
+		moc_predefs.h \
+		../../../../Qt/5.11.2/clang_64/bin/moc
+	/Users/clytie/Documents/Qt/5.11.2/clang_64/bin/moc $(DEFINES) --include /Users/clytie/Documents/mcts_gobang/src/GUI/build-GUI-Desktop_Qt_5_11_2_clang_64bit-Debug/moc_predefs.h -I/Users/clytie/Documents/Qt/5.11.2/clang_64/mkspecs/macx-clang -I/Users/clytie/Documents/mcts_gobang/src/GUI/GUI -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtGui.framework/Headers -I/Users/clytie/Documents/Qt/5.11.2/clang_64/lib/QtCore.framework/Headers -I. -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/clytie/Documents/Qt/5.11.2/clang_64/lib ../GUI/gobang_mcts.h -o moc_gobang_mcts.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -714,30 +804,65 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
-main.o: ../GUI/main.cpp ../GUI/GoBang.h \
+main.o: ../GUI/main.cpp ../GUI/game.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
-		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
-		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
-		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
-		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		../GUI/GoBang.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QThread \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../GUI/MCTSThread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
 		../../Board.h \
+		../../MCTSPlayer.h \
+		../../MCTS.h \
+		../../utils.h \
+		../GUI/gobang_mcts.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QApplication \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../GUI/main.cpp
 
 GoBang.o: ../GUI/GoBang.cpp ../GUI/GoBang.h \
-		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
-		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
-		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
-		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
-		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
-		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
-		../../Board.h
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QThread \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../GUI/MCTSThread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../Board.h \
+		../../MCTSPlayer.h \
+		../../MCTS.h \
+		../../utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GoBang.o ../GUI/GoBang.cpp
 
 MCTSThread.o: ../GUI/MCTSThread.cpp ../GUI/MCTSThread.h \
@@ -765,11 +890,77 @@ MCTSPlayer.o: ../../MCTSPlayer.cpp ../../MCTSPlayer.h \
 		../../utils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MCTSPlayer.o ../../MCTSPlayer.cpp
 
+game.o: ../GUI/game.cpp ../GUI/game.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QPushButton \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QVBoxLayout \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		../GUI/GoBang.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QThread \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../GUI/MCTSThread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../Board.h \
+		../../MCTSPlayer.h \
+		../../MCTS.h \
+		../../utils.h \
+		../GUI/gobang_mcts.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../GUI/game.cpp
+
+gobang_mcts.o: ../GUI/gobang_mcts.cpp ../GUI/gobang_mcts.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../GUI/GoBang.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QLabel \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qlabel.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QThread \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPalette \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpalette.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QPainter \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qpainter.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QMouseEvent \
+		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qevent.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QMessageBox \
+		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		../GUI/MCTSThread.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		../../Board.h \
+		../../MCTSPlayer.h \
+		../../MCTS.h \
+		../../utils.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gobang_mcts.o ../GUI/gobang_mcts.cpp
+
 moc_GoBang.o: moc_GoBang.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_GoBang.o moc_GoBang.cpp
 
 moc_MCTSThread.o: moc_MCTSThread.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_MCTSThread.o moc_MCTSThread.cpp
+
+moc_game.o: moc_game.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_game.o moc_game.cpp
+
+moc_gobang_mcts.o: moc_gobang_mcts.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_gobang_mcts.o moc_gobang_mcts.cpp
 
 ####### Install
 

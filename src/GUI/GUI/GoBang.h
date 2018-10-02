@@ -1,19 +1,22 @@
 #ifndef GOBANG_H
 #define GOBANG_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QPalette>
-#include <QIcon>
 #include <vector>
+#include <utility>
+
+#include <QIcon>
+#include <QLabel>
+#include <QWidget>
 #include <QThread>
+#include <QPalette>
+#include <QPainter>
 #include <QMouseEvent>
 #include <QMessageBox>
-#include <utility>
-#include <QPainter>
+
 #include "MCTSThread.h"
 #include "../../MCTSPlayer.h"
 #include "../../Board.h"
+
 
 const int WIDTH = 700;
 const int HEIGHT = 700;

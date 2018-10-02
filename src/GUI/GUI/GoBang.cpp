@@ -14,24 +14,22 @@ GoBang::GoBang(QWidget *parent)
     init();
 }
 
-GoBang::~GoBang()
-{
+GoBang::~GoBang() {}
 
-}
-void GoBang::init() {
+void GoBang::init() {    
     palette = new QPalette;
-    palette->setBrush(QPalette::Background,QBrush(QPixmap("/Users/clytie/Documents/mcts_gobang/src/GUI/img/board.png")));
+    palette->setBrush(QPalette::Background,QBrush(QPixmap("../../../../img/board.png")));
     setPalette(*palette);
     setCursor(Qt::PointingHandCursor);
     resize(WIDTH, HEIGHT);
-    setMinimumSize(QSize(WIDTH, HEIGHT));
-    setMaximumSize(QSize(WIDTH, HEIGHT));
+    setMinimumSize(WIDTH, HEIGHT);
+    setMaximumSize(WIDTH, HEIGHT);
 
     setWindowTitle("GoBang");
-    setWindowIcon(QIcon("/Users/clytie/Documents/mcts_gobang/src/GUI/img/black.png"));
+    setWindowIcon(QIcon("../../../../img/black.png"));
 
-    black = new QPixmap("/Users/clytie/Documents/mcts_gobang/src/GUI/img/black.png");
-    white = new QPixmap("/Users/clytie/Documents/mcts_gobang/src/GUI/img/white.png");
+    black = new QPixmap("../../../../img/black.png");
+    white = new QPixmap("../../../../img/white.png");
     for (unsigned int i = 0; i < board.size * board.size; ++i) {
         pieces.push_back(new Pieces(this));
     }
@@ -47,7 +45,7 @@ void GoBang::mousePressEvent(QMouseEvent * e) {
         if (i != -1 && j != -1 && board.moves[0][i][j] == 0 && board.moves[1][i][j] == 0) {
             draw(i, j);
             ai_done = false;
-            MCTSThread * mcts = new MCTSThread(board);
+            MCTSThread * mcts = new MCTSThread(board, 15000, 100);
             connect(mcts, SIGNAL(finish(unsigned int)), this, SLOT(mcts_draw(unsigned int))); //里面不加参数
             mcts->start();
         }
@@ -80,6 +78,9 @@ void GoBang::draw(int i, int j) {
 }
 
 void GoBang::mcts_draw(unsigned int action) {
+    if (board.over()) {
+        return;
+    }
     int i = (int)action / board.size, j = (int)action % board.size;
     if (step != 0) {
         draw(i, j);
@@ -117,23 +118,12 @@ pair<double, double> GoBang::coordinate_transform_map2pixel(int i, int j) {
 }
 
 void GoBang::gameover(int winner) {
-    QMessageBox::StandardButton reply;
     if (winner == BLACK)
-        reply = QMessageBox::question(this, "", "You Win! Continue?", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        QMessageBox::information(this, "", "You Win!", QMessageBox::Yes);
     else if (winner == WHITE)
-        reply = QMessageBox::question(this, "", "You Lose! Continue?", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        QMessageBox::information(this, "", "You Lose!", QMessageBox::Yes);
     else
-        reply = QMessageBox::question(this, "", "TIE! Continue?", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        QMessageBox::information(this, "", "TIE!", QMessageBox::Yes);
 
-    if (reply == QMessageBox::Yes) {
-        piece_now = BLACK;
-        board.reset();
-        step = 0;
-        for (const auto & piece : pieces) {
-            piece->clear();
-        }
-        update();
-    } else {
-        close();
-    }
+    close();
 }
