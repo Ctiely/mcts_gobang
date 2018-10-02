@@ -11,7 +11,7 @@ class MCTSThread : public QThread
 {
     Q_OBJECT
 public:
-    MCTSThread(Board & board, unsigned int n_playground=15000, unsigned int limit=100);
+    MCTSThread(Board & board, double c_pust=5.0, unsigned int n_playground=15000, unsigned int limit=100);
     void run();
     Board * pboard;
     MCTSPlayer * player;

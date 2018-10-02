@@ -8,23 +8,30 @@ Pieces::Pieces(QWidget * parent)
     setScaledContents(true);
 }
 
-GoBang::GoBang(QWidget *parent)
-    : QWidget(parent), board(9, 5), piece_now(BLACK), step(0), x(0), y(0)
+GoBang::GoBang(QWidget *parent, unsigned int size)
+    : QWidget(parent), board(size, 5), piece_now(BLACK), step(0), x(0), y(0)
 {
     init();
 }
 
 GoBang::~GoBang() {}
 
-void GoBang::init() {    
+void GoBang::init() {
     palette = new QPalette;
-    palette->setBrush(QPalette::Background,QBrush(QPixmap("../../../../img/board.png")));
+    if (board.size == 9) {
+        palette->setBrush(QPalette::Background, QBrush(QPixmap("../../../../img/board.png")));
+        resize(WIDTH, HEIGHT);
+        setMinimumSize(WIDTH, HEIGHT);
+        setMaximumSize(WIDTH, HEIGHT);
+    } else {
+        palette->setBrush(QPalette::Background, QBrush(QPixmap("../../../../img/chessboard.jpg")));
+        resize(WIDTH_FULL, HEIGHT_FULL);
+        setMinimumSize(WIDTH_FULL, HEIGHT_FULL);
+        setMaximumSize(WIDTH_FULL, HEIGHT_FULL);
+    }
+
     setPalette(*palette);
     setCursor(Qt::PointingHandCursor);
-    resize(WIDTH, HEIGHT);
-    setMinimumSize(WIDTH, HEIGHT);
-    setMaximumSize(WIDTH, HEIGHT);
-
     setWindowTitle("GoBang");
     setWindowIcon(QIcon("../../../../img/black.png"));
 
@@ -45,7 +52,7 @@ void GoBang::mousePressEvent(QMouseEvent * e) {
         if (i != -1 && j != -1 && board.moves[0][i][j] == 0 && board.moves[1][i][j] == 0) {
             draw(i, j);
             ai_done = false;
-            MCTSThread * mcts = new MCTSThread(board, 15000, 100);
+            MCTSThread * mcts = (board.size == 9) ? (new MCTSThread(board, 5, 20000, 100)) : (new MCTSThread(board, 25, 50000, 300));
             connect(mcts, SIGNAL(finish(unsigned int)), this, SLOT(mcts_draw(unsigned int))); //里面不加参数
             mcts->start();
         }
@@ -64,7 +71,11 @@ void GoBang::draw(int i, int j) {
     }
 
     board.step(i * board.size + j);
-    pieces[step]->setGeometry(x, y, PIECE, PIECE);
+    if (board.size == 9) {
+        pieces[step]->setGeometry(x, y, PIECE, PIECE);
+    } else {
+        pieces[step]->setGeometry(x, y, PIECE_FULL, PIECE_FULL);
+    }
     step = board.round;
 
     if (board.spaces == 0) {
@@ -104,7 +115,14 @@ void GoBang::paintEvent(QPaintEvent * e) {
 
 pair<int, int> GoBang::coordinate_transform_pixel2map(double x, double y) {
     pair<int, int> action;
-    int i = int(round((y - MARGIN) / GRID)), j = int(round((x - MARGIN) / GRID));
+    int i, j;
+    if (board.size == 9) {
+        i = int(round((y - MARGIN) / GRID));
+        j = int(round((x - MARGIN) / GRID));
+    } else {
+        i = int(round((y - MARGIN_FULL) / GRID_FULL));
+        j = int(round((x - MARGIN_FULL) / GRID_FULL));
+    }
     action.first = (i >= 0 && i <= (int)board.size) ? i : (-1);
     action.second = (j >= 0 && j <= (int)board.size) ? j : (-1);
     return action;
@@ -112,8 +130,13 @@ pair<int, int> GoBang::coordinate_transform_pixel2map(double x, double y) {
 
 pair<double, double> GoBang::coordinate_transform_map2pixel(int i, int j) {
     pair<double, double> coordinate;
-    coordinate.first = MARGIN + j * GRID - PIECE / 2.;
-    coordinate.second = MARGIN + i * GRID - PIECE / 2.;
+    if (board.size == 9) {
+        coordinate.first = MARGIN + j * GRID - PIECE / 2.;
+        coordinate.second = MARGIN + i * GRID - PIECE / 2.;
+    } else {
+        coordinate.first = MARGIN_FULL + j * GRID_FULL - PIECE_FULL / 2.;
+        coordinate.second = MARGIN_FULL + i * GRID_FULL - PIECE_FULL / 2.;
+    }
     return coordinate;
 }
 

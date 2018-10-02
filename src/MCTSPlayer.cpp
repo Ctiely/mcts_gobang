@@ -13,6 +13,7 @@ unsigned int MCTSPlayer::get_action(Board & board) {
     if (!board.over() && board.spaces > 0) {
         action = mcts.get_action(board);
         mcts.update_with_action((unsigned int)-1);
+        //mcts.update_with_action(action);
     }
     return action;
 }

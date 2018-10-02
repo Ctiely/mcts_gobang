@@ -134,15 +134,18 @@ unsigned int MCTS::get_action(Board & board) { //每个状态(board)下都重建
         //assert(board_copy.moves != board.moves);
         //assert(board_copy.availables != board.availables);
     }
-    auto max_n_visits = 0;
-    unsigned int action = board.spaces;
+    vector<unsigned int> max_visits;
+    unsigned int max_n_visits = 0;
     for (const auto & child : root->children) {
         if (child.second->n_visits > max_n_visits) {
             max_n_visits = child.second->n_visits;
-            action = child.first;
+            vector<unsigned int>().swap(max_visits);
+            max_visits.emplace_back(child.first);
+        } else if (child.second->n_visits == max_n_visits) {
+            max_visits.emplace_back(child.first);
         }
     }
-    return action;
+    return max_visits[random() % max_visits.size()];
 }
 
 void MCTS::update_with_action(unsigned int last_action) {

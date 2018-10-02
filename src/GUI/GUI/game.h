@@ -16,10 +16,12 @@ public:
     explicit game(QWidget *parent = nullptr);
     QPushButton * person_mcts;
     QPushButton * mcts_mcts;
+    QPushButton * person_mcts_full;
 
 public slots:
     void gobang_person_mcts();
     void gobang_mcts_mcts();
+    void gobang_person_mcts_full();
 };
 
 #endif // GAME_H
