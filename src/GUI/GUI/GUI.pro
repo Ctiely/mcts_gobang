@@ -28,7 +28,9 @@ SOURCES += \
         main.cpp \
         GoBang.cpp \
     MCTSThread.cpp \
-    ../../*.cpp \
+    ../../env/*.cpp \
+    ../../MCTS/*.cpp \
+    ../../TreeNode/*.cpp \
     game.cpp \
     gobang_mcts.cpp
 
@@ -36,6 +38,9 @@ HEADERS += \
         GoBang.h \
     MCTSThread.h \
     ../../*.h \
+    ../../env/*.h \
+    ../../MCTS/*.h \
+    ../../TreeNode/*.h \
     game.h \
     gobang_mcts.h
 

@@ -11,16 +11,16 @@ using namespace std;
 
 class MCTSPlayer {
 public:
-    explicit MCTSPlayer(double c_puct=sqrt(2), unsigned int n_playground=5000, unsigned int limit=1000, string name="MCTSPlayer")
-            : name(move(name)), mcts(c_puct, n_playground, limit) {
-        srandom((unsigned int)time(nullptr));
-    }
+    explicit MCTSPlayer(double c_puct=sqrt(2),
+                        unsigned int n_playground=10000,
+                        unsigned int limit=100,
+                        string name="MCTSPlayer");
 
+    string name;
     void reset();
     unsigned int get_action(Board & board);
 private:
     MCTS mcts;
-    string name;
 };
 
 

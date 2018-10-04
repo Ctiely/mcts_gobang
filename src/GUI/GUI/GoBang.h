@@ -14,8 +14,8 @@
 #include <QMessageBox>
 
 #include "MCTSThread.h"
-#include "../../MCTSPlayer.h"
-#include "../../Board.h"
+#include "../../MCTS/MCTSPlayer.h"
+#include "../../env/Board.h"
 
 
 const int WIDTH = 700;

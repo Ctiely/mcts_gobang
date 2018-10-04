@@ -7,8 +7,9 @@
 
 #include <list>
 #include <vector>
+#include <random>
+#include <cassert>
 #include <utility>
-
 
 namespace utils { //两个namespace可能会冲突
     template <typename T1, typename T2>
@@ -44,6 +45,22 @@ namespace utils { //两个namespace可能会冲突
             }
         }
         return result;
+    }
+
+    template <typename T1>
+    static T1 sampling(std::vector<T1> & vec, std::vector<float> & probs) {
+        //assert(vec.size() == probs.size());
+        for (int i = 1; i < vec.size(); ++i) {
+            probs[i] += probs[i - 1];
+        }
+        float u = ((float)random() / RAND_MAX) * probs.back();
+        int index;
+        for (index = 0; index < vec.size(); ++index) {
+            if (probs[index] > u) {
+                break;
+            }
+        }
+        return vec[index];
     }
 };
 

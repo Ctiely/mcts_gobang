@@ -53,9 +53,10 @@ OBJECTS_DIR   = ./
 SOURCES       = ../GUI/main.cpp \
 		../GUI/GoBang.cpp \
 		../GUI/MCTSThread.cpp \
-		../../Board.cpp \
-		../../MCTS.cpp \
-		../../MCTSPlayer.cpp \
+		../../env/Board.cpp \
+		../../MCTS/MCTS.cpp \
+		../../MCTS/MCTSPlayer.cpp \
+		../../TreeNode/TreeNode.cpp \
 		../GUI/game.cpp \
 		../GUI/gobang_mcts.cpp moc_GoBang.cpp \
 		moc_MCTSThread.cpp \
@@ -67,6 +68,7 @@ OBJECTS       = main.o \
 		Board.o \
 		MCTS.o \
 		MCTSPlayer.o \
+		TreeNode.o \
 		game.o \
 		gobang_mcts.o \
 		moc_GoBang.o \
@@ -241,17 +243,19 @@ DIST          = ../../../../Qt/5.11.2/clang_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.11.2/clang_64/mkspecs/features/lex.prf \
 		../GUI/GUI.pro ../GUI/GoBang.h \
 		../GUI/MCTSThread.h \
-		../../Board.h \
-		../../MCTS.h \
-		../../MCTSPlayer.h \
 		../../utils.h \
+		../../env/Board.h \
+		../../MCTS/MCTS.h \
+		../../MCTS/MCTSPlayer.h \
+		../../TreeNode/TreeNode.h \
 		../GUI/game.h \
 		../GUI/gobang_mcts.h ../GUI/main.cpp \
 		../GUI/GoBang.cpp \
 		../GUI/MCTSThread.cpp \
-		../../Board.cpp \
-		../../MCTS.cpp \
-		../../MCTSPlayer.cpp \
+		../../env/Board.cpp \
+		../../MCTS/MCTS.cpp \
+		../../MCTS/MCTSPlayer.cpp \
+		../../TreeNode/TreeNode.cpp \
 		../GUI/game.cpp \
 		../GUI/gobang_mcts.cpp
 QMAKE_TARGET  = GUI
@@ -645,8 +649,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../../Qt/5.11.2/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../GUI/GoBang.h ../GUI/MCTSThread.h ../../Board.h ../../MCTS.h ../../MCTSPlayer.h ../../utils.h ../GUI/game.h ../GUI/gobang_mcts.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../GUI/main.cpp ../GUI/GoBang.cpp ../GUI/MCTSThread.cpp ../../Board.cpp ../../MCTS.cpp ../../MCTSPlayer.cpp ../GUI/game.cpp ../GUI/gobang_mcts.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../GUI/GoBang.h ../GUI/MCTSThread.h ../../utils.h ../../env/Board.h ../../MCTS/MCTS.h ../../MCTS/MCTSPlayer.h ../../TreeNode/TreeNode.h ../GUI/game.h ../GUI/gobang_mcts.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../GUI/main.cpp ../GUI/GoBang.cpp ../GUI/MCTSThread.cpp ../../env/Board.cpp ../../MCTS/MCTS.cpp ../../MCTS/MCTSPlayer.cpp ../../TreeNode/TreeNode.cpp ../GUI/game.cpp ../GUI/gobang_mcts.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -700,10 +704,11 @@ moc_GoBang.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon
 		../GUI/MCTSThread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
 		../../utils.h \
+		../../TreeNode/TreeNode.h \
 		../GUI/GoBang.h \
 		moc_predefs.h \
 		../../../../Qt/5.11.2/clang_64/bin/moc
@@ -713,10 +718,11 @@ moc_MCTSThread.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
 		../../utils.h \
+		../../TreeNode/TreeNode.h \
 		../GUI/MCTSThread.h \
 		moc_predefs.h \
 		../../../../Qt/5.11.2/clang_64/bin/moc
@@ -747,11 +753,14 @@ moc_game.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWi
 		../GUI/MCTSThread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
 		../../utils.h \
+		../../TreeNode/TreeNode.h \
 		../GUI/gobang_mcts.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		../GUI/game.h \
 		moc_predefs.h \
 		../../../../Qt/5.11.2/clang_64/bin/moc
@@ -759,6 +768,8 @@ moc_game.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWi
 
 moc_gobang_mcts.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		../GUI/GoBang.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
@@ -777,10 +788,11 @@ moc_gobang_mcts.cpp: ../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Head
 		../GUI/MCTSThread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
 		../../utils.h \
+		../../TreeNode/TreeNode.h \
 		../GUI/gobang_mcts.h \
 		moc_predefs.h \
 		../../../../Qt/5.11.2/clang_64/bin/moc
@@ -830,11 +842,14 @@ main.o: ../GUI/main.cpp ../GUI/game.h \
 		../GUI/MCTSThread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
 		../../utils.h \
+		../../TreeNode/TreeNode.h \
 		../GUI/gobang_mcts.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QApplication \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qapplication.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../GUI/main.cpp
@@ -859,10 +874,11 @@ GoBang.o: ../GUI/GoBang.cpp ../GUI/GoBang.h \
 		../GUI/MCTSThread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
-		../../utils.h
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
+		../../utils.h \
+		../../TreeNode/TreeNode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GoBang.o ../GUI/GoBang.cpp
 
 MCTSThread.o: ../GUI/MCTSThread.cpp ../GUI/MCTSThread.h \
@@ -870,25 +886,31 @@ MCTSThread.o: ../GUI/MCTSThread.cpp ../GUI/MCTSThread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qthread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
-		../../utils.h
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
+		../../utils.h \
+		../../TreeNode/TreeNode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MCTSThread.o ../GUI/MCTSThread.cpp
 
-Board.o: ../../Board.cpp ../../Board.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Board.o ../../Board.cpp
+Board.o: ../../env/Board.cpp ../../env/Board.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Board.o ../../env/Board.cpp
 
-MCTS.o: ../../MCTS.cpp ../../MCTS.h \
-		../../Board.h \
-		../../utils.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MCTS.o ../../MCTS.cpp
+MCTS.o: ../../MCTS/MCTS.cpp ../../MCTS/MCTS.h \
+		../../utils.h \
+		../../env/Board.h \
+		../../TreeNode/TreeNode.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MCTS.o ../../MCTS/MCTS.cpp
 
-MCTSPlayer.o: ../../MCTSPlayer.cpp ../../MCTSPlayer.h \
-		../../MCTS.h \
-		../../Board.h \
-		../../utils.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MCTSPlayer.o ../../MCTSPlayer.cpp
+MCTSPlayer.o: ../../MCTS/MCTSPlayer.cpp ../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
+		../../utils.h \
+		../../env/Board.h \
+		../../TreeNode/TreeNode.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MCTSPlayer.o ../../MCTS/MCTSPlayer.cpp
+
+TreeNode.o: ../../TreeNode/TreeNode.cpp ../../TreeNode/TreeNode.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o TreeNode.o ../../TreeNode/TreeNode.cpp
 
 game.o: ../GUI/game.cpp ../GUI/game.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
@@ -916,16 +938,21 @@ game.o: ../GUI/game.cpp ../GUI/game.h \
 		../GUI/MCTSThread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
 		../../utils.h \
-		../GUI/gobang_mcts.h
+		../../TreeNode/TreeNode.h \
+		../GUI/gobang_mcts.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qtimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o game.o ../GUI/game.cpp
 
 gobang_mcts.o: ../GUI/gobang_mcts.cpp ../GUI/gobang_mcts.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/QWidget \
 		../../../../Qt/5.11.2/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QTimer \
+		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		../GUI/GoBang.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/QIcon \
 		../../../../Qt/5.11.2/clang_64/lib/QtGui.framework/Headers/qicon.h \
@@ -944,10 +971,11 @@ gobang_mcts.o: ../GUI/gobang_mcts.cpp ../GUI/gobang_mcts.h \
 		../GUI/MCTSThread.h \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../../Qt/5.11.2/clang_64/lib/QtCore.framework/Headers/qobject.h \
-		../../Board.h \
-		../../MCTSPlayer.h \
-		../../MCTS.h \
-		../../utils.h
+		../../env/Board.h \
+		../../MCTS/MCTSPlayer.h \
+		../../MCTS/MCTS.h \
+		../../utils.h \
+		../../TreeNode/TreeNode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gobang_mcts.o ../GUI/gobang_mcts.cpp
 
 moc_GoBang.o: moc_GoBang.cpp 

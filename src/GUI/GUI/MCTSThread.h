@@ -4,8 +4,8 @@
 #include <QThread>
 #include <QObject>
 
-#include "../../Board.h"
-#include "../../MCTSPlayer.h"
+#include "../../env/Board.h"
+#include "../../MCTS/MCTSPlayer.h"
 
 class MCTSThread : public QThread
 {

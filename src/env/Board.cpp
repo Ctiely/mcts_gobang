@@ -3,7 +3,7 @@
 //
 
 #include "Board.h"
-#include <iostream>
+
 void Board::reset() {
     spaces = size * size;
     round = 0;
@@ -24,7 +24,6 @@ void Board::check(Coordinate & cur) {
     unsigned int right = (cur.col + diff < size - 1) ? (cur.col + diff) : (size - 1);
     unsigned int top = ((int)(cur.row - diff) > 0) ? (cur.row - diff) : 0;
     unsigned int bottom = (cur.row + diff < size - 1) ? (cur.row + diff) : (size - 1);
-    //cout << left << " " << right << " " << top << " " << bottom << endl;
     unsigned int vertical_sum = 0, horizontal_sum = 0, left_slope = 0, right_slope = 0;
     unsigned int player = current_player();
     for (unsigned int i = left; i <= right; ++i) {
