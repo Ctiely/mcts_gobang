@@ -53,7 +53,7 @@ void play_alphago_zero() {
 }
 
 void test_network() {
-    const string model_path = "/Users/clytie/Documents/ctensorflow/models/model-2000";
+    const string model_path = "../python/models/model-2000";
     Board board(10, 5);
     board.step(5, 5);
     board.step(5, 6);
@@ -68,7 +68,7 @@ void test_network() {
 }
 
 void test_alphago_zero() {
-    const string model_path = "/Users/clytie/Documents/ctensorflow/models/model-2000";
+    const string model_path = "../python/models/model-2000";
     Board board(10, 5);
     board.step(5, 5);
     board.step(5, 6);
