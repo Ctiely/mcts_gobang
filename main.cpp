@@ -29,7 +29,7 @@ void play() {
 }
 
 void play_alphago_zero() {
-    string model_path = "../python/models/model-2000";
+    string model_path = "../python/models/model-4000";
     unsigned int win_n = 5;
     unsigned int size = 10;
     Board board(size, win_n);

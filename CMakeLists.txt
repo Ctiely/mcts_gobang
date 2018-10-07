@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 project(mcts_gobang)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11 -W -ltensorflow_framework")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11 -W")
 link_directories(/Users/clytie/Documents/tensorflow/bazel-bin/tensorflow)
 include_directories(/Users/clytie/Documents/tensorflow
         /Users/clytie/Documents/tensorflow/bazel-genfiles
@@ -21,5 +21,7 @@ add_executable(mcts_gobang
         src/MCTS_alphago_zero/MCTS_alphago_zero.h
         src/TreeNode/TreeNode.cpp
         src/TreeNode/TreeNode.h
-        main.cpp src/MCTS_alphago_zero/MCTSPlayer_alphago_zero.cpp src/MCTS_alphago_zero/MCTSPlayer_alphago_zero.h)
-target_link_libraries(mcts_gobang tensorflow_cc)
+        src/MCTS_alphago_zero/MCTSPlayer_alphago_zero.cpp
+        src/MCTS_alphago_zero/MCTSPlayer_alphago_zero.h
+        main.cpp)
+target_link_libraries(mcts_gobang tensorflow_cc tensorflow_framework)
