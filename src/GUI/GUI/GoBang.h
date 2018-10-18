@@ -48,7 +48,7 @@ public:
     GoBang(QWidget *parent = 0,
            unsigned int size=9,
            bool alphago_play=false,
-           std::string model_path="model-4000");
+           std::string model_path="");
     ~GoBang();
 
     void init();

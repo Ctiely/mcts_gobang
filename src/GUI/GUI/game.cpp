@@ -53,11 +53,11 @@ void game::gobang_person_mcts_full() {
 }
 
 void game::gobang_person_alphago() {
-    GoBang * alphago = new GoBang(nullptr, 9, true, "../src/models/model-4000");
+    GoBang * alphago = new GoBang(nullptr, 9, true, "../src/models/model-5000");
     alphago->show();
 }
 
 void game::gobang_mcts_alphago() {
-    gobang_mcts * alphago_mcts = new gobang_mcts(nullptr, true, "../src/models/model-4000");
+    gobang_mcts * alphago_mcts = new gobang_mcts(nullptr, true, "../src/models/model-5000");
     alphago_mcts->show();
 }

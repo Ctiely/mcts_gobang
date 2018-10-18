@@ -72,7 +72,7 @@ void GoBang::mousePressEvent(QMouseEvent * e) {
                 connect(mcts, SIGNAL(finish(unsigned int)), this, SLOT(ai_draw(unsigned int))); //里面不加参数
                 mcts->start();
             } else {
-                AlphaGoThread * alphago = new AlphaGoThread(board, model_path, board.size, 5, 20000);
+                AlphaGoThread * alphago = new AlphaGoThread(board, model_path, board.size, 5, 15000);
                 connect(alphago, SIGNAL(finish(unsigned int)), this, SLOT(ai_draw(unsigned int)));
                 alphago->start();
             }

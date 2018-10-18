@@ -10,7 +10,7 @@ class gobang_mcts : public QWidget
 {
     Q_OBJECT
 public:
-    explicit gobang_mcts(QWidget *parent = nullptr, bool alphago_play=false, std::string model_path="model-4000");
+    explicit gobang_mcts(QWidget *parent = nullptr, bool alphago_play=false, std::string model_path="");
     ~gobang_mcts() = default;
     void init();
     void play();
