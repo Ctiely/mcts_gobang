@@ -1,13 +1,18 @@
 #include "gobang_mcts.h"
 
-gobang_mcts::gobang_mcts(QWidget *parent)
-    : QWidget(parent), board(9, 5), piece_now(BLACK), step(0), player(nullptr)
+gobang_mcts::gobang_mcts(QWidget *parent, bool alphago_play, std::string model_path)
+    : QWidget(parent),
+      board(9, 5),
+      piece_now(BLACK),
+      step(0),
+      mcts(nullptr),
+      alphago(nullptr),
+      alphago_play(alphago_play),
+      model_path(std::move(model_path))
 {
     init();
     play();
 }
-
-gobang_mcts::~gobang_mcts() {}
 
 void gobang_mcts::init() {
     palette = new QPalette;
@@ -35,22 +40,41 @@ void gobang_mcts::init() {
 }
 
 void gobang_mcts::play() {
-   timer = new QTimer(this);
-   timer->start(4000);
-   connect(timer, SIGNAL(timeout()), this, SLOT(move()));
+    timer = new QTimer(this);
+    timer->start(4000);
+    if (alphago_play) {
+        connect(timer, SIGNAL(timeout()), this, SLOT(alphago_move()));
+    } else {
+        connect(timer, SIGNAL(timeout()), this, SLOT(mcts_move()));
+    }
 }
 
-void gobang_mcts::move() {
+void gobang_mcts::mcts_move() {
     if (board.over()) {
         return;
     }
     if (board.current_player() == 0) {
-        player = new MCTSPlayer(5, 25000, 100);
+        mcts = new MCTSPlayer(5, 25000, 100);
     } else {
-        player = new MCTSPlayer(5, 25000, 100);
+        mcts = new MCTSPlayer(5, 25000, 100);
     }
-    unsigned int action = player->get_action(board);
-    mcts_draw(action);
+    unsigned int action = mcts->get_action(board);
+    ai_draw(action);
+}
+
+void gobang_mcts::alphago_move() {
+    if (board.over()) {
+        return;
+    }
+    unsigned int action;
+    if (board.current_player() == 0) {
+        alphago = new MCTSPlayer_alphago_zero(model_path, board.size, 5, 15000);
+        action = alphago->get_action(board);
+    } else {
+        mcts = new MCTSPlayer(5, 15000, 100);
+        action = mcts->get_action(board);
+    }
+    ai_draw(action);
 }
 
 void gobang_mcts::draw(int i, int j) {
@@ -89,7 +113,7 @@ void gobang_mcts::gameover(int winner) {
     close();
 }
 
-void gobang_mcts::mcts_draw(unsigned int action) {
+void gobang_mcts::ai_draw(unsigned int action) {
     int i = (int)action / board.size, j = (int)action % board.size;
     draw(i, j);
     update();

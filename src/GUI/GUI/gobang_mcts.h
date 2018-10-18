@@ -10,11 +10,11 @@ class gobang_mcts : public QWidget
 {
     Q_OBJECT
 public:
-    explicit gobang_mcts(QWidget *parent = nullptr);
-    ~gobang_mcts();
+    explicit gobang_mcts(QWidget *parent = nullptr, bool alphago_play=false, std::string model_path="model-4000");
+    ~gobang_mcts() = default;
     void init();
     void play();
-    void mcts_draw(unsigned int action);
+    void ai_draw(unsigned int action);
     void draw(int i, int j);
     void gameover(int winner);
     pair<double, double> coordinate_transform_map2pixel(int i, int j);
@@ -29,10 +29,14 @@ public:
 
 private:
     QTimer * timer;
-    MCTSPlayer * player;
-
+    MCTSPlayer * mcts;
+    MCTSPlayer_alphago_zero * alphago;
+    bool alphago_play;
+    string model_path;
+    
 public slots:
-    void move();
+    void mcts_move();
+    void alphago_move();
 };
 
 #endif // GOBANG_MCTS_H

@@ -8,8 +8,18 @@ Pieces::Pieces(QWidget * parent)
     setScaledContents(true);
 }
 
-GoBang::GoBang(QWidget *parent, unsigned int size)
-    : QWidget(parent), board(size, 5), piece_now(BLACK), step(0), x(0), y(0)
+GoBang::GoBang(QWidget *parent,
+               unsigned int size,
+               bool alphago_play,
+               std::string model_path)
+    : QWidget(parent),
+      board(size, 5),
+      piece_now(BLACK),
+      step(0),
+      x(0),
+      y(0),
+      alphago_play(alphago_play),
+      model_path(std::move(model_path))
 {
     init();
 }
@@ -57,9 +67,15 @@ void GoBang::mousePressEvent(QMouseEvent * e) {
         if (i != -1 && j != -1 && board.moves[0][i][j] == 0 && board.moves[1][i][j] == 0) {
             draw(i, j);
             ai_done = false;
-            MCTSThread * mcts = (board.size == 9) ? (new MCTSThread(board, 5, 20000, 100)) : (new MCTSThread(board, 25, 50000, 300));
-            connect(mcts, SIGNAL(finish(unsigned int)), this, SLOT(mcts_draw(unsigned int))); //里面不加参数
-            mcts->start();
+            if (!alphago_play) {
+                MCTSThread * mcts = (board.size == 9) ? (new MCTSThread(board, 5, 20000, 100)) : (new MCTSThread(board, 25, 50000, 300));
+                connect(mcts, SIGNAL(finish(unsigned int)), this, SLOT(ai_draw(unsigned int))); //里面不加参数
+                mcts->start();
+            } else {
+                AlphaGoThread * alphago = new AlphaGoThread(board, model_path, board.size, 5, 20000);
+                connect(alphago, SIGNAL(finish(unsigned int)), this, SLOT(ai_draw(unsigned int)));
+                alphago->start();
+            }
         }
     }
 }
@@ -93,7 +109,7 @@ void GoBang::draw(int i, int j) {
     }
 }
 
-void GoBang::mcts_draw(unsigned int action) {
+void GoBang::ai_draw(unsigned int action) {
     if (board.over()) {
         return;
     }

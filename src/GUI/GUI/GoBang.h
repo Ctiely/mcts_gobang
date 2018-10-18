@@ -14,9 +14,9 @@
 #include <QMessageBox>
 
 #include "MCTSThread.h"
-#include "../../MCTS/MCTSPlayer.h"
 #include "../../env/Board.h"
-
+#include "../../MCTS/MCTSPlayer.h"
+#include "../../MCTS_alphago_zero/MCTSPlayer_alphago_zero.h"
 
 const int WIDTH = 700;
 const int HEIGHT = 700;
@@ -45,7 +45,10 @@ class GoBang : public QWidget
     Q_OBJECT
 
 public:
-    GoBang(QWidget *parent = 0, unsigned int size=9);
+    GoBang(QWidget *parent = 0,
+           unsigned int size=9,
+           bool alphago_play=false,
+           std::string model_path="model-4000");
     ~GoBang();
 
     void init();
@@ -67,9 +70,11 @@ public:
     void paintEvent(QPaintEvent * e);
 
 public slots:
-    void mcts_draw(unsigned int action);
-
+    void ai_draw(unsigned int action);
+    
 private:
     double x, y;
+    bool alphago_play;
+    string model_path;
 };
 #endif // GOBANG_H

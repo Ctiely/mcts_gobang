@@ -17,11 +17,15 @@ public:
     QPushButton * person_mcts;
     QPushButton * mcts_mcts;
     QPushButton * person_mcts_full;
+    QPushButton * mcts_alphago;
+    QPushButton * person_alphago;
 
 public slots:
     void gobang_person_mcts();
     void gobang_mcts_mcts();
     void gobang_person_mcts_full();
+    void gobang_person_alphago();
+    void gobang_mcts_alphago();
 };
 
 #endif // GAME_H
