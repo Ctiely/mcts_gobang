@@ -1,7 +1,7 @@
 #include <iostream>
+#include <QApplication>
 
-#include "src/env/Board.h"
-#include "src/MCTS/MCTSPlayer.h"
+#include "src/GUI/GUI/game.h"
 #include "src/network/network.h"
 #include "src/MCTS_alphago_zero/MCTSPlayer_alphago_zero.h"
 
@@ -143,7 +143,15 @@ void test_sampling() {
     }
 }
 
-int main() {
+int game_gui(int argc, char *argv[]) {
+    QApplication a(argc, argv);
+    game g;
+    g.show();
+
+    return a.exec();
+}
+
+int main(int argc, char *argv[]) {
     //test_board();
     //test_MCTS();
     //test_zip();
@@ -151,6 +159,7 @@ int main() {
     //test_alphago_zero();
     //test_sampling();
     //play();
-    play_alphago_zero();
+    //play_alphago_zero();
+    game_gui(argc, argv);
     return 0;
 }

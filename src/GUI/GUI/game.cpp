@@ -9,7 +9,8 @@ game::game(QWidget *parent) : QWidget(parent)
     setWindowTitle(tr("五子棋"));
     setMinimumSize(200, 200);
     setMaximumSize(200, 200);
-    setWindowIcon(QIcon("../../../../img/chessboard.jpg"));
+    //setWindowIcon(QIcon("../../../../img/chessboard.jpg"));
+    setWindowIcon(QIcon("../src/GUI/img/chessboard.jpg"));
 
     QVBoxLayout * mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(person_mcts, 0);

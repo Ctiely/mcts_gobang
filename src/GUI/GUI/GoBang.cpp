@@ -19,12 +19,14 @@ GoBang::~GoBang() {}
 void GoBang::init() {
     palette = new QPalette;
     if (board.size == 9) {
-        palette->setBrush(QPalette::Background, QBrush(QPixmap("../../../../img/board.png")));
+        //palette->setBrush(QPalette::Background, QBrush(QPixmap("../../../../img/board.png")));
+        palette->setBrush(QPalette::Background, QBrush(QPixmap("../src/GUI/img/board.png")));
         resize(WIDTH, HEIGHT);
         setMinimumSize(WIDTH, HEIGHT);
         setMaximumSize(WIDTH, HEIGHT);
     } else {
-        palette->setBrush(QPalette::Background, QBrush(QPixmap("../../../../img/chessboard.jpg")));
+        //palette->setBrush(QPalette::Background, QBrush(QPixmap("../../../../img/chessboard.jpg")));
+        palette->setBrush(QPalette::Background, QBrush(QPixmap("../src/GUI/img/chessboard.jpg")));
         resize(WIDTH_FULL, HEIGHT_FULL);
         setMinimumSize(WIDTH_FULL, HEIGHT_FULL);
         setMaximumSize(WIDTH_FULL, HEIGHT_FULL);
@@ -33,10 +35,13 @@ void GoBang::init() {
     setPalette(*palette);
     setCursor(Qt::PointingHandCursor);
     setWindowTitle("GoBang");
-    setWindowIcon(QIcon("../../../../img/black.png"));
+    //setWindowIcon(QIcon("../../../../img/black.png"));
+    setWindowIcon(QIcon("../src/GUI/img/black.png"));
 
-    black = new QPixmap("../../../../img/black.png");
-    white = new QPixmap("../../../../img/white.png");
+    //black = new QPixmap("../../../../img/black.png");
+    //white = new QPixmap("../../../../img/white.png");
+    black = new QPixmap("../src/GUI/img/black.png");
+    white = new QPixmap("../src/GUI/img/white.png");
     for (unsigned int i = 0; i < board.size * board.size; ++i) {
         pieces.push_back(new Pieces(this));
     }

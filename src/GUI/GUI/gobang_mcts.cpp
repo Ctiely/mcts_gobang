@@ -11,7 +11,9 @@ gobang_mcts::~gobang_mcts() {}
 
 void gobang_mcts::init() {
     palette = new QPalette;
-    palette->setBrush(QPalette::Background,QBrush(QPixmap("../../../../img/board.png")));
+    //palette->setBrush(QPalette::Background,QBrush(QPixmap("../../../../img/board.png")));
+    palette->setBrush(QPalette::Background,QBrush(QPixmap("../src/GUI/img/board.png")));
+
     setPalette(*palette);
     setCursor(Qt::PointingHandCursor);
     resize(WIDTH, HEIGHT);
@@ -19,10 +21,14 @@ void gobang_mcts::init() {
     setMaximumSize(WIDTH, HEIGHT);
 
     setWindowTitle("GoBang");
-    setWindowIcon(QIcon("../../../../img/black.png"));
+    //setWindowIcon(QIcon("../../../../img/black.png"));
 
-    black = new QPixmap("../../../../img/black.png");
-    white = new QPixmap("../../../../img/white.png");
+    //black = new QPixmap("../../../../img/black.png");
+    //white = new QPixmap("../../../../img/white.png");
+    setWindowIcon(QIcon("../src/GUI/img/black.png"));
+
+    black = new QPixmap("../src/GUI/img/black.png");
+    white = new QPixmap("../src/GUI/img/white.png");
     for (unsigned int i = 0; i < board.size * board.size; ++i) {
         pieces.push_back(new Pieces(this));
     }
