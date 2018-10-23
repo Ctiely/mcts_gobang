@@ -9,7 +9,7 @@ from network.policy_value_network import preprocess_state, policy_value_network
 logging.basicConfig(level=logging.INFO, format='%(asctime)s|%(levelname)s|%(message)s')
 
 
-class TrainPipeline():
+class TrainPipeline(object):
     def __init__(self, model_file=None):
         # params of the board and the game
         self.board_size = 10
