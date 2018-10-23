@@ -114,7 +114,7 @@ class DataGenerator(object):
         self.board_size = 9
         self.win_n = 5
         self.board = cBoard(self.board_size, self.win_n)
-        self.buffer_size = 100
+        self.buffer_size = 1000000
         self.data_buffer = deque(maxlen=self.buffer_size)
         self.play_batch_size = 1
         self.mcts_player = MCTSPlayer(5, 10000, 100)
