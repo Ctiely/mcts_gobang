@@ -13,7 +13,9 @@ import numpy as np
 from collections import deque
 from env.cBoard import cBoard
 from MCTS.TreeNode import TreeNode
+from multiprocessing import Queue, Process
 from network.policy_value_network import preprocess_state
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s|%(levelname)s|%(message)s')
 
@@ -109,7 +111,8 @@ class MCTSPlayer(object):
                 return action
     
 class DataGenerator(object):
-    def __init__(self):
+    def __init__(self, num_process=10):
+        self.num_process = num_process
         # params of the board and the game
         self.board_size = 9
         self.win_n = 5
@@ -165,30 +168,59 @@ class DataGenerator(object):
         self.mcts_player.reset_player()
         return self.board.winner, zip(states, mcts_probs, winners_z)
 
-    def collect_selfplay_data(self, n_games=1):
+    def collect_selfplay_data(self, n_games, q):
         """collect self-play data for training"""
         for i in range(n_games):
             winner, play_data = self.self_play()
             play_data = list(play_data)[:]
             # augment the data
             play_data = self.get_equi_data(play_data)
-            self.data_buffer.extend(play_data)
-
-    def save(self, data_file="mcts_data.dat"):
-        mcts_datas = []
-        while len(self.data_buffer) < self.buffer_size:
-            self.collect_selfplay_data(self.play_batch_size)
+            q.put(play_data)
             logging.info("finish!")
+            #self.data_buffer.extend(play_data)
+
+    def save2json(self, data_file):
+        mcts_datas = []
+        for data in self.data_buffer:
+            mcts_data = {}
+            mcts_data["states"] = data[0].tolist()
+            mcts_data["probs"] = data[1].tolist()
+            mcts_data["winners"] = data[2]
+            mcts_datas.append(mcts_data)
+        with open(data_file, "w") as f:
+            json.dump(mcts_datas, f)
+        logging.info("save mcts data into %s" % data_file)
+    
+    def save(self, data_file="mcts_data.dat"):
+        save_num = 10000
+        while len(self.data_buffer) < self.buffer_size:
+            q = Queue()
+            procs = []
+        
+            for i in range(self.num_process):
+                p = Process(target=self.collect_selfplay_data,
+                            args=(self.play_batch_size, q))
+                procs.append(p)
+                p.start()
+        
+            # Collect all results into a single result dict. We know how many dicts
+            # with results to expect.
+            for i in range(self.num_process):
+                self.data_buffer.extend(q.get())
+        
+            # Wait for all worker processes to finish
+            for p in procs:
+                p.join()
+                
+            #print("done")
+            #print(len(self.data_buffer))
+            #self.collect_selfplay_data(self.play_batch_size)
+            num = len(self.data_buffer)
+            if num // save_num:
+                save_num += 10000
+                self.save2json(data_file + "-" + str(num))
         else:
-            for data in self.data_buffer:
-                mcts_data = {}
-                mcts_data["states"] = data[0].tolist()
-                mcts_data["probs"] = data[1].tolist()
-                mcts_data["winners"] = data[2]
-                mcts_datas.append(mcts_data)
-            with open(data_file, "w") as f:
-                json.dump(mcts_datas, f)
-            logging.info("save mcts data into %s" % data_file)
+            self.save2json(data_file)
             
             
 if __name__ == '__main__':
